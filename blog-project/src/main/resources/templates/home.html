@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <h3 th:text="'Welcome, ' + ${userName}"></h3>
+
+        <form action="#" th:action="@{/newBlog}" method="GET">
+            <button type="submit" name="new-blog">New Blog</button>
+        </form>
+        <form action="#" th:action="@{/logout}" method="GET">
+            <button type="submit" name="logout">Logout</button>
+        </form>
+        <form action="#" th:action="@{/search}" method="GET">
+            <label>Search</label>
+            <input type="text" name="search"/>
+            <button type="submit" name="search">Search</button>
+        </form>
+        <form action="#" th:action="@{/filter-by-author}" method="GET">
+            <label>Filter by Author</label>
+            <input type="text" name="author-search"/>
+            <button type="submit" name="filter">Filter by Author</button>
+        </form>
+        <form action="#" th:action="@{/filter-by-date-time}" method="GET">
+            <label>Filter by Date and Time</label>
+            <input type="date" name="date-time-search"/>
+            <button type="submit" name="filter">Filter by Date and Time</button>
+        </form>
+        <form action="#" th:action="@{/filter-by-tags}" method="GET">
+            <label>Filter by Tags</label>
+            <input type="text" name="tag-search"/>
+            <button type="submit" name="filter">Filter by Tags</button>
+        </form>
+        <form action="#" th:action="@{sort}" method="GET">
+            <label>Sort</label>
+            <select id="date" name="date">
+                <option value="oldest-first">Oldest First</option>
+                <option value="newest-first">Newest First</option>
+            </select>
+            <button type="submit" name="sort">Sort</button>
+        </form>
+
+        <div th:each="post : ${postList}">
+            <h1 th:text="${post.title}"/>
+            <hr>
+            <h2>Written By:</h2>
+            <h3 th:text="${post.author}"/>
+            <h4>Date and Time:</h4>
+            <h5 th:text="${post.publishedAt}"/>
+            <hr>
+            <h6>Tags:</h6>
+            <p th:text="${post.tags}"/>
+            <hr>
+
+            <a  th:href="@{viewBlog(postId=${post.id})}"><p th:text="${post.excerpt}"/></a>
+            
+            <a th:if="${post.author == userName}" th:href="@{editBlog(postId=${post.id})}">Edit Blog</a>
+
+            <a th:if="${userName == 'Admin'}" th:href="@{editBlog(postId=${post.id})}">Edit Blog</a>
+
+
+            <a th:if="${post.author == userName}" th:href="@{deleteBlog(postId=${post.id})}">Delete Blog</a>
+
+            <a th:if="${userName == 'Admin'}" th:href="@{deleteBlog(postId=${post.id})}">Delete Blog</a>
+
+            <hr>
+            <hr>
+        </div>
+        <div>
+            Total Posts: [[${totalPosts}]] - Page [[${currentPage}]] of [[${totalPages}]] &nbsp; - &nbsp;
+
+            <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                <a th:if="${i != currentPage}" th:href="@{pageAfterLogin(pageNumber=${i})}">[[${i}]]</a>
+                <span th:unless="${i != currentPage}">[[${i}]]</span> &nbsp;
+            </span>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Blog</title>
+    </head>
+    <body>
+
+
+        <h1 th:text="${title}"/>
+        <hr>
+        <h3>Written By:</h3>
+        <h4 th:text="${author}"/>
+        <hr>
+        <p th:text="${content}"/>
+
+        <h2>Comments:</h2>
+        <div th:each="tempComment : ${commentList}">
+            <h1 th:text="${tempComment.name}"/>
+            <h3 th:text="${tempComment.email}"/>
+            <h5 th:text="${tempComment.comment}"/>
+
+            <a th:if="${author == username}" th:href="@{deleteComment(commentId=${tempComment.id})}">Delete Comment</a>
+            <span th:unless="${author == userName}"></span>
+            <hr>
+        </div>
+
+        <form action="#" th:action="@{/addComment}" th:object="${comments}" method="POST">
+            <input type="hidden" th:field="*{postId}"/>
+            <label>Name</label><br>
+            <input type="text" name="name" th:field="*{name}"/><br>
+            <label>Email</label><br>
+            <input type="text" name="email" th:field="*{email}"/><br>
+            <label>Comment</label><br>
+            <textarea name="comment" rows="10" cols="100"></textarea>
+            <br>
+            <button type="submit" name="postComment">Post Comment</button>
+        </form>
+    </body>
+</html>
